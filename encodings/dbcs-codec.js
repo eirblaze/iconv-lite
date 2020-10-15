@@ -331,7 +331,9 @@ class DBCSEncoder {
         this.defaultCharSingleByte = codec.defCharSB;
         this.gb18030 = codec.gb18030;
 
-        this.charRefMode = options.charRefMode || ""
+        if (options !== undefined) {
+            this.charRefMode = options.charRefMode ? options.charRefMode : "";
+        }
     }
 
     write(str) {
@@ -441,37 +443,34 @@ class DBCSEncoder {
 
             // 3. Write dbcsCode character.
             if (dbcsCode === UNASSIGNED) {
-
                 // HTML
-                if ( this.charRefMode == "html" ) {
-                    writeDbcs("&".charCodeAt(0))
-                    writeDbcs("#".charCodeAt(0))
-                    writeDbcs("x".charCodeAt(0))
-                    const uCodeNumCharArr = uCode.toString(16).split("")
+                if (this.charRefMode === "html") {
+                    writeDbcs("&".charCodeAt(0));
+                    writeDbcs("#".charCodeAt(0));
+                    writeDbcs("x".charCodeAt(0));
+                    const uCodeNumCharArr = uCode.toString(16).split("");
                     for (const uCodeNumChar of uCodeNumCharArr) {
-                        writeDbcs(uCodeNumChar.charCodeAt(0))
+                        writeDbcs(uCodeNumChar.charCodeAt(0));
                     }
-                    writeDbcs(";".charCodeAt(0))
+                    writeDbcs(";".charCodeAt(0));
 
-                // CSS
-                } else if ( this.charRefMode == "css" ) {
-                    writeDbcs("\\".charCodeAt(0))
-                    const uCodeNumCharArr = uCode.toString(16).split("")
+                    // CSS
+                } else if (this.charRefMode === "css") {
+                    writeDbcs("\\".charCodeAt(0));
+                    const uCodeNumCharArr = uCode.toString(16).split("");
                     // for (let padding = 6-uCodeNumCharArr.length; padding > 0; padding--) {
                     //     writeDbcs("0".charCodeAt(0))
                     // }
                     for (const uCodeNumChar of uCodeNumCharArr) {
-                        writeDbcs(uCodeNumChar.charCodeAt(0))
+                        writeDbcs(uCodeNumChar.charCodeAt(0));
                     }
 
-                // no charRef
+                    // no charRef
                 } else {
-                    writeDbcs(this.defaultCharSingleByte)
-
+                    writeDbcs(this.defaultCharSingleByte);
                 }
             } else {
-                writeDbcs(dbcsCode)
-
+                writeDbcs(dbcsCode);
             }
         }
 

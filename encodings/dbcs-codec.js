@@ -345,9 +345,6 @@ class DBCSEncoder {
             bytePos = 0;
 
         for (;;) {
-            // 全角チルダ問題〜～
-            // if (str[i] === "〜") str[i] = "～"
-
             // 0. Get next character.
             let uCode;
             if (nextChar === -1) {

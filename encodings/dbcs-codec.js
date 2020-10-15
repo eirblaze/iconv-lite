@@ -330,6 +330,8 @@ class DBCSEncoder {
         this.encodeTableSeq = codec.encodeTableSeq;
         this.defaultCharSingleByte = codec.defCharSB;
         this.gb18030 = codec.gb18030;
+
+        this.charRefMode = options.charRefMode || ""
     }
 
     write(str) {
@@ -439,9 +441,41 @@ class DBCSEncoder {
 
             // 3. Write dbcsCode character.
             if (dbcsCode === UNASSIGNED) {
-                dbcsCode = this.defaultCharSingleByte;
-            }
 
+                // HTML
+                if ( this.charRefMode == "html" ) {
+                    writeDbcs("&".charCodeAt(0))
+                    writeDbcs("#".charCodeAt(0))
+                    writeDbcs("x".charCodeAt(0))
+                    const uCodeNumCharArr = uCode.toString(16).split("")
+                    for (const uCodeNumChar of uCodeNumCharArr) {
+                        writeDbcs(uCodeNumChar.charCodeAt(0))
+                    }
+                    writeDbcs(";".charCodeAt(0))
+
+                // CSS
+                } else if ( this.charRefMode == "css" ) {
+                    writeDbcs("\\".charCodeAt(0))
+                    const uCodeNumCharArr = uCode.toString(16).split("")
+                    // for (let padding = 6-uCodeNumCharArr.length; padding > 0; padding--) {
+                    //     writeDbcs("0".charCodeAt(0))
+                    // }
+                    for (const uCodeNumChar of uCodeNumCharArr) {
+                        writeDbcs(uCodeNumChar.charCodeAt(0))
+                    }
+
+                // no charRef
+                } else {
+                    writeDbcs(this.defaultCharSingleByte)
+
+                }
+            } else {
+                writeDbcs(dbcsCode)
+
+            }
+        }
+
+        function writeDbcs(dbcsCode) {
             if (dbcsCode < 0x100) {
                 bytes[bytePos++] = dbcsCode;
             } else if (dbcsCode < 0x10000) {

@@ -28,6 +28,7 @@ export interface Options {
     stripBOM?: boolean;
     addBOM?: boolean;
     defaultEncoding?: string;
+    charRefMode?: string;
 }
 
 export interface EncoderStream {

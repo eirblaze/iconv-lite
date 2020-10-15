@@ -50,12 +50,18 @@ describe("ShiftJIS tests #node-web", function () {
                 "93 fa 96 7b 61 62 63 b1 b2 b3 26 23 78 31 66 33 38 38 3b"
             ),
             testStringBig5BufferCss = utils.bytes(
-                "93 fa 96 7b 61 62 63 b1 b2 b3 26 23 78 31 66 33 38 38 3b"
+                "93 fa 96 7b 61 62 63 b1 b2 b3 5c 31 66 33 38 38"
             ),
-            testString2 = "試ｽ～🍙",
-            testStringBig5Buffer2 = utils.bytes("8e 8e bd 3f"),
-            testStringBig5Buffer2Html = utils.bytes("8e 8e bd 3f"),
-            testStringBig5Buffer2Css = utils.bytes("8e 8e bd 3f");
+            testString2 = "試ｽ〜～🍙‖∥−－¢￠£￡¬￢",
+            testStringBig5Buffer2 = utils.bytes(
+                "8e 8e bd 3f 81 60 3f 3f 81 61 3f 81 7c 3f 81 91 3f 81 92 3f 81 ca"
+            ),
+            testStringBig5Buffer2Html = utils.bytes(
+                "8e 8e bd 26 23 78 33 30 31 63 3b 81 60 26 23 78 31 66 33 35 39 3b 26 23 78 32 30 31 36 3b 81 61 26 23 78 32 32 31 32 3b 81 7c 26 23 78 61 32 3b"
+            ),
+            testStringBig5Buffer2Css = utils.bytes(
+                "8e 8e bd 5c 33 30 31 63 81 60 5c 31 66 33 35 39 5c 32 30 31 36 81 61 5c 32 32 31 32 81 7c 5c 61 32 81 91 5c 61 33 81 92 5c 61 63 81 ca"
+            );
 
         assert.strictEqual(
             utils.hex(iconv.encode(testString, "shiftjis", {})),
